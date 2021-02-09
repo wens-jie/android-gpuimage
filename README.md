@@ -11,16 +11,16 @@ Goal is to have something as similar to GPUImage as possible. Vertex and fragmen
 * Android 2.2 or higher (OpenGL ES 2.0)
 
 ## Usage
-
+添加JitPack仓库和依赖
 ### Gradle dependency
 
 ```groovy
 repositories {
-    jcenter()
+    maven { url 'https://www.jitpack.io' }
 }
 
 dependencies {
-    implementation 'jp.co.cyberagent.android:gpuimage:2.x.x'
+    implementation 'com.gitee.wens-jie:android-gpuimage:Tag'
 }
 ```
 

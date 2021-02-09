@@ -49,6 +49,8 @@ public class GPUImageFilter {
             "     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n" +
             "}";
 
+    public static final String INTENSITY = "intensity";
+
     private final LinkedList<Runnable> runOnDraw;
     private final String vertexShader;
     private final String fragmentShader;
@@ -56,6 +58,8 @@ public class GPUImageFilter {
     private int glAttribPosition;
     private int glUniformTexture;
     private int glAttribTextureCoordinate;
+    protected int intensityLocation;
+    protected float intensity = 1.0f;
     private int outputWidth;
     private int outputHeight;
     private boolean isInitialized;
@@ -70,7 +74,7 @@ public class GPUImageFilter {
         this.fragmentShader = fragmentShader;
     }
 
-    private final void init() {
+    private void init() {
         onInit();
         onInitialized();
     }
@@ -80,10 +84,20 @@ public class GPUImageFilter {
         glAttribPosition = GLES20.glGetAttribLocation(glProgId, "position");
         glUniformTexture = GLES20.glGetUniformLocation(glProgId, "inputImageTexture");
         glAttribTextureCoordinate = GLES20.glGetAttribLocation(glProgId, "inputTextureCoordinate");
+        intensityLocation = GLES20.glGetUniformLocation(glProgId, INTENSITY);
         isInitialized = true;
     }
 
+    public float getIntensity(){return intensity;}
+
+    public void setIntensity(float intensity) {
+        this.intensity = intensity;
+        this.setFloat(intensityLocation, intensity);
+    }
+
+
     public void onInitialized() {
+        setIntensity(intensity);
     }
 
     public void ifNeedInit() {

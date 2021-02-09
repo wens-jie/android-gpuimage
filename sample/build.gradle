@@ -29,7 +29,6 @@ android {
 repositories {
     google()
     jcenter()
-//    maven { url  "https://dl.bintray.com/cats-oss/maven" }
 }
 
 dependencies {
