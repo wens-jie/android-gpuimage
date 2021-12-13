@@ -19,6 +19,7 @@ package jp.co.cyberagent.android.gpuimage.util;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.hardware.Camera.Size;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class OpenGlUtils {
     }
 
     public static int loadTexture(final Bitmap img, final int usedTexId, final boolean recycle) {
-        int textures[] = new int[1];
+        int[] textures = new int[1];
         if (usedTexId == NO_TEXTURE) {
             GLES20.glGenTextures(1, textures, 0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
@@ -59,7 +60,7 @@ public class OpenGlUtils {
     }
 
     public static int loadTexture(final IntBuffer data, final int width, final int height, final int usedTexId) {
-        int textures[] = new int[1];
+        int[] textures = new int[1];
         if (usedTexId == NO_TEXTURE) {
             GLES20.glGenTextures(1, textures, 0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
@@ -79,6 +80,27 @@ public class OpenGlUtils {
                     height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, data);
             textures[0] = usedTexId;
         }
+        return textures[0];
+    }
+
+    public static int loadTexture(final int usedTexId) {
+        int[] textures = new int[1];
+        if (usedTexId == NO_TEXTURE) {
+            GLES20.glGenTextures(0, textures, 0);
+            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textures[0]);
+            GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                    GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                    GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                    GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                    GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        } else {
+            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, usedTexId);
+            textures[0] = usedTexId;
+        }
+        checkError();
         return textures[0];
     }
 
@@ -137,5 +159,12 @@ public class OpenGlUtils {
     public static float rnd(final float min, final float max) {
         float fRandNum = (float) Math.random();
         return min + (max - min) * fRandNum;
+    }
+
+    public static void checkError() {
+        int error = GLES20.glGetError();
+        if (error != GLES20.GL_NO_ERROR) {
+            Log.e("OpenGl", "checkError: ", new Exception(GLUtils.getEGLErrorString(error)));
+        }
     }
 }
