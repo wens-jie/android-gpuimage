@@ -81,7 +81,12 @@ public class GPUImage {
 
         this.context = context;
         filter = new GPUImageFilter();
-        renderer = new GPUImageRenderer(filter);
+        renderer = onCreateRender();
+    }
+
+
+    protected GPUImageRenderer onCreateRender() {
+        return new GPUImageRenderer(filter);
     }
 
     /**
@@ -259,7 +264,7 @@ public class GPUImage {
      * @return array with width and height of bitmap image
      */
     public int[] getScaleSize() {
-        return new int[] {scaleWidth, scaleHeight};
+        return new int[]{scaleWidth, scaleHeight};
     }
 
     /**

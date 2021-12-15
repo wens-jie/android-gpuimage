@@ -80,7 +80,7 @@ public class GPUImageView extends FrameLayout {
                 a.recycle();
             }
         }
-        gpuImage = new GPUImage(context);
+        gpuImage = onCreateGPUImage(context);
         if (surfaceType == SURFACE_TYPE_TEXTURE_VIEW) {
             surfaceView = new GPUImageGLTextureView(context, attrs);
             gpuImage.setGLTextureView((GLTextureView) surfaceView);
@@ -89,6 +89,10 @@ public class GPUImageView extends FrameLayout {
             gpuImage.setGLSurfaceView((GLSurfaceView) surfaceView);
         }
         addView(surfaceView);
+    }
+
+    protected GPUImage onCreateGPUImage(Context context) {
+        return new GPUImage(context);
     }
 
     @Override
