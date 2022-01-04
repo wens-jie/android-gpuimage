@@ -86,7 +86,7 @@ public class OpenGlUtils {
     public static int loadTexture(final int usedTexId) {
         int[] textures = new int[1];
         if (usedTexId == NO_TEXTURE) {
-            GLES20.glGenTextures(0, textures, 0);
+            GLES20.glGenTextures(1, textures, 0);
             GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textures[0]);
             GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                     GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
